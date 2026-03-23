@@ -67,15 +67,32 @@
 
 ## 安装
 
-### 快速安装（推荐）
+### 一键安装（推荐）
+
+需要已安装 [Rust 工具链](https://rustup.rs/)。
 
 ```bash
-npm install -g @cometix/ccline
+curl -fsSL https://raw.githubusercontent.com/lucasmen9527/CCometixLine/master/install.sh | bash
 ```
 
-使用镜像源加速：
+自动完成 clone、编译、安装到 `~/.claude/ccline/`。
+
+### 从源码构建
+
 ```bash
-npm install -g @cometix/ccline --registry https://registry.npmmirror.com
+git clone https://github.com/lucasmen9527/CCometixLine.git
+cd CCometixLine
+cargo build --release
+mkdir -p ~/.claude/ccline
+cp target/release/ccometixline ~/.claude/ccline/ccline
+```
+
+### 更新
+
+重新运行安装脚本或从源码重新构建：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lucasmen9527/CCometixLine/master/install.sh | bash
 ```
 
 ### Claude Code 配置
@@ -93,58 +110,6 @@ npm install -g @cometix/ccline --registry https://registry.npmmirror.com
 ```
 
 > **说明：** `~` 在所有平台通用（macOS/Linux/Windows，需 Claude Code v2.1.47+）。
-
-### 从源码构建
-
-```bash
-git clone https://github.com/lucasmen9527/CCometixLine.git
-cd CCometixLine
-cargo build --release
-mkdir -p ~/.claude/ccline
-cp target/release/ccometixline ~/.claude/ccline/ccline
-```
-
-### 更新
-
-```bash
-npm update -g @cometix/ccline
-```
-
-<details>
-<summary>手动安装（点击展开）</summary>
-
-从 [Releases](https://github.com/lucasmen9527/CCometixLine/releases) 下载：
-
-#### macOS (Apple Silicon)
-```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/lucasmen9527/CCometixLine/releases/latest/download/ccline-macos-arm64.tar.gz
-tar -xzf ccline-macos-arm64.tar.gz && cp ccline ~/.claude/ccline/ && chmod +x ~/.claude/ccline/ccline
-```
-
-#### macOS (Intel)
-```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/lucasmen9527/CCometixLine/releases/latest/download/ccline-macos-x64.tar.gz
-tar -xzf ccline-macos-x64.tar.gz && cp ccline ~/.claude/ccline/ && chmod +x ~/.claude/ccline/ccline
-```
-
-#### Linux
-```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/lucasmen9527/CCometixLine/releases/latest/download/ccline-linux-x64.tar.gz
-tar -xzf ccline-linux-x64.tar.gz && cp ccline ~/.claude/ccline/ && chmod +x ~/.claude/ccline/ccline
-```
-
-#### Windows
-```powershell
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\ccline"
-Invoke-WebRequest -Uri "https://github.com/lucasmen9527/CCometixLine/releases/latest/download/ccline-windows-x64.zip" -OutFile "ccline-windows-x64.zip"
-Expand-Archive -Path "ccline-windows-x64.zip" -DestinationPath "."
-Move-Item "ccline.exe" "$env:USERPROFILE\.claude\ccline\"
-```
-
-</details>
 
 ## 使用
 

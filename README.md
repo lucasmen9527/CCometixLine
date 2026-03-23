@@ -67,10 +67,32 @@ Parses the Claude Code transcript JSONL file to provide live tracking:
 
 ## Installation
 
-### Quick Install (Recommended)
+### One-line Install (Recommended)
+
+Requires [Rust toolchain](https://rustup.rs/) installed.
 
 ```bash
-npm install -g @cometix/ccline
+curl -fsSL https://raw.githubusercontent.com/lucasmen9527/CCometixLine/master/install.sh | bash
+```
+
+This will clone, build, and install `ccline` to `~/.claude/ccline/`.
+
+### Build from Source
+
+```bash
+git clone https://github.com/lucasmen9527/CCometixLine.git
+cd CCometixLine
+cargo build --release
+mkdir -p ~/.claude/ccline
+cp target/release/ccometixline ~/.claude/ccline/ccline
+```
+
+### Update
+
+Re-run the install script or rebuild from source:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/lucasmen9527/CCometixLine/master/install.sh | bash
 ```
 
 ### Claude Code Configuration
@@ -88,58 +110,6 @@ Add to your Claude Code `settings.json`:
 ```
 
 > **Note:** `~` works on all platforms (macOS/Linux/Windows with Claude Code v2.1.47+).
-
-### Build from Source
-
-```bash
-git clone https://github.com/lucasmen9527/CCometixLine.git
-cd CCometixLine
-cargo build --release
-mkdir -p ~/.claude/ccline
-cp target/release/ccometixline ~/.claude/ccline/ccline
-```
-
-### Update
-
-```bash
-npm update -g @cometix/ccline
-```
-
-<details>
-<summary>Manual Installation (Click to expand)</summary>
-
-Download from [Releases](https://github.com/lucasmen9527/CCometixLine/releases):
-
-#### macOS (Apple Silicon)
-```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/lucasmen9527/CCometixLine/releases/latest/download/ccline-macos-arm64.tar.gz
-tar -xzf ccline-macos-arm64.tar.gz && cp ccline ~/.claude/ccline/ && chmod +x ~/.claude/ccline/ccline
-```
-
-#### macOS (Intel)
-```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/lucasmen9527/CCometixLine/releases/latest/download/ccline-macos-x64.tar.gz
-tar -xzf ccline-macos-x64.tar.gz && cp ccline ~/.claude/ccline/ && chmod +x ~/.claude/ccline/ccline
-```
-
-#### Linux
-```bash
-mkdir -p ~/.claude/ccline
-wget https://github.com/lucasmen9527/CCometixLine/releases/latest/download/ccline-linux-x64.tar.gz
-tar -xzf ccline-linux-x64.tar.gz && cp ccline ~/.claude/ccline/ && chmod +x ~/.claude/ccline/ccline
-```
-
-#### Windows
-```powershell
-New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\ccline"
-Invoke-WebRequest -Uri "https://github.com/lucasmen9527/CCometixLine/releases/latest/download/ccline-windows-x64.zip" -OutFile "ccline-windows-x64.zip"
-Expand-Archive -Path "ccline-windows-x64.zip" -DestinationPath "."
-Move-Item "ccline.exe" "$env:USERPROFILE\.claude\ccline\"
-```
-
-</details>
 
 ## Usage
 
