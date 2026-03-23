@@ -458,8 +458,26 @@ pub fn collect_all_segments(
     input: &crate::config::InputData,
 ) -> Vec<(SegmentConfig, SegmentData)> {
     use crate::core::segments::*;
+    use crate::core::transcript::TranscriptAnalysis;
 
     let mut results = Vec::new();
+
+    // Parse transcript once for segments that need it (tools, agents, todos)
+    let needs_transcript = config.segments.iter().any(|s| {
+        s.enabled
+            && matches!(
+                s.id,
+                crate::config::SegmentId::Tools
+                    | crate::config::SegmentId::Agents
+                    | crate::config::SegmentId::Todos
+            )
+    });
+
+    let transcript = if needs_transcript {
+        TranscriptAnalysis::parse(&input.transcript_path)
+    } else {
+        TranscriptAnalysis::default()
+    };
 
     for segment_config in &config.segments {
         // Skip disabled segments to avoid unnecessary API requests
@@ -507,6 +525,22 @@ pub fn collect_all_segments(
             }
             crate::config::SegmentId::Update => {
                 let segment = UpdateSegment::new();
+                segment.collect(input)
+            }
+            crate::config::SegmentId::Tools => {
+                let segment = ToolsSegment::new(transcript.clone());
+                segment.collect(input)
+            }
+            crate::config::SegmentId::Agents => {
+                let segment = AgentsSegment::new(transcript.clone());
+                segment.collect(input)
+            }
+            crate::config::SegmentId::Todos => {
+                let segment = TodosSegment::new(transcript.clone());
+                segment.collect(input)
+            }
+            crate::config::SegmentId::Environment => {
+                let segment = EnvironmentSegment::new();
                 segment.collect(input)
             }
         };

@@ -73,6 +73,10 @@ pub enum SegmentId {
     Session,
     OutputStyle,
     Update,
+    Tools,
+    Agents,
+    Todos,
+    Environment,
 }
 
 // Legacy compatibility structure

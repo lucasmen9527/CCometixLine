@@ -71,8 +71,24 @@ impl Segment for ContextWindowSegment {
         metadata.insert("limit".to_string(), context_limit.to_string());
         metadata.insert("model".to_string(), input.model.id.clone());
 
+        // Build context bar: colored progress bar like claude-hud
+        let bar = match context_used_token_opt {
+            Some(_) => {
+                let rate_str = metadata.get("percentage").unwrap();
+                let rate: f64 = rate_str.parse().unwrap_or(0.0);
+                build_context_bar(rate, 10)
+            }
+            None => String::new(),
+        };
+
+        let primary = if bar.is_empty() {
+            format!("{} · {} tokens", percentage_display, tokens_display)
+        } else {
+            format!("{} {} · {}", bar, percentage_display, tokens_display)
+        };
+
         Some(SegmentData {
-            primary: format!("{} · {} tokens", percentage_display, tokens_display),
+            primary,
             secondary: String::new(),
             metadata,
         })
@@ -269,4 +285,29 @@ fn try_find_usage_from_project_history(transcript_path: &Path) -> Option<u32> {
     }
 
     None
+}
+
+/// Build a colored context bar like claude-hud's visual bar
+/// Green < 70%, Yellow 70-85%, Red >= 85%
+fn build_context_bar(percent: f64, width: usize) -> String {
+    let filled = ((percent / 100.0) * width as f64).round() as usize;
+    let filled = filled.min(width);
+    let empty = width - filled;
+
+    // Choose color based on percentage
+    let color_code = if percent >= 85.0 {
+        "\x1b[31m" // Red
+    } else if percent >= 70.0 {
+        "\x1b[33m" // Yellow
+    } else {
+        "\x1b[32m" // Green
+    };
+
+    let filled_str: String = std::iter::repeat('\u{2588}').take(filled).collect(); // full block
+    let empty_str: String = std::iter::repeat('\u{2591}').take(empty).collect(); // light shade
+
+    format!(
+        "{}{}\x1b[90m{}\x1b[0m",
+        color_code, filled_str, empty_str
+    )
 }

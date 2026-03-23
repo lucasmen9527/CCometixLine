@@ -183,6 +183,26 @@ impl PreviewComponent {
                         map
                     },
                 },
+                SegmentId::Tools => SegmentData {
+                    primary: "Read: main.rs".to_string(),
+                    secondary: "2act 8ok".to_string(),
+                    metadata: HashMap::new(),
+                },
+                SegmentId::Agents => SegmentData {
+                    primary: "Explore".to_string(),
+                    secondary: "1ok".to_string(),
+                    metadata: HashMap::new(),
+                },
+                SegmentId::Todos => SegmentData {
+                    primary: "Fix tests".to_string(),
+                    secondary: "2/5".to_string(),
+                    metadata: HashMap::new(),
+                },
+                SegmentId::Environment => SegmentData {
+                    primary: "2 CLAUDE.md · 4 rules · 3 MCPs · 2 hooks".to_string(),
+                    secondary: "".to_string(),
+                    metadata: HashMap::new(),
+                },
             };
 
             segments_data.push((segment_config.clone(), mock_data));
